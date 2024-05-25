@@ -12,8 +12,9 @@
 
 class Utils {
 public:
+	static const int BUFFER_SIZE;
 	static const std::string LINE_SEPARATOR;
-	static const std::string IP;
+	static const std::string HOST;
 	static const int PORT;
 
 	static int open_connection();

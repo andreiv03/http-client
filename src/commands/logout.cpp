@@ -1,7 +1,7 @@
 #include "../../include/commands/logout.h"
 
 void LogoutCommand::execute() const {
-	if (Client::token.empty()) {
+	if (Client::cookies.empty()) {
 		std::cerr << "ERROR: You are not logged in!" << std::endl;
 		return;
 	}
@@ -13,12 +13,6 @@ void LogoutCommand::execute() const {
 	const std::string request = Request::compute();
 	Utils::send_to_server(request);
 	std::string response = Utils::receive_from_server();
-
-	if (response.empty()) {
-		Client::socket_fd = Utils::open_connection();
-		Utils::send_to_server(request);
-		response = Utils::receive_from_server();
-	}
 
 	int status_code = Utils::get_status_code(response);
 

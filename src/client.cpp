@@ -7,9 +7,9 @@ std::vector<std::string> Client::cookies;
 
 void Client::start() {
 	Client::initialize_commands();
-	Client::socket_fd = Utils::open_connection();
 
 	while (true) {
+		Client::socket_fd = Utils::open_connection();
 		std::string command;
 		std::getline(std::cin, command);
 
@@ -22,52 +22,61 @@ void Client::start() {
 			case REGISTER: {
 				auto *register_command = new(std::nothrow) RegisterCommand();
 				register_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case LOGIN: {
 				auto *login_command = new(std::nothrow) LoginCommand();
 				login_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case ENTER_LIBRARY: {
 				auto *enter_library_command = new(std::nothrow) EnterLibraryCommand();
 				enter_library_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case GET_BOOKS: {
 				auto *get_books_command = new(std::nothrow) GetBooksCommand();
 				get_books_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case GET_BOOK: {
 				auto *get_book_command = new(std::nothrow) GetBookCommand();
 				get_book_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case ADD_BOOK: {
 				auto *add_book_command = new(std::nothrow) AddBookCommand();
 				add_book_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case DELETE_BOOK: {
 				auto *delete_book_command = new(std::nothrow) DeleteBookCommand();
 				delete_book_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			case LOGOUT: {
 				auto *logout_command = new(std::nothrow) LogoutCommand();
 				logout_command->execute();
+				close(Client::socket_fd);
 				break;
 			}
 
 			default: {
+				close(Client::socket_fd);
 				std::cerr << "ERROR: The command is not valid!" << std::endl;
 				break;
 			}

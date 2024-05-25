@@ -1,7 +1,8 @@
 #include "../include/utils.h"
 
+const int Utils::BUFFER_SIZE = 4096;
 const std::string Utils::LINE_SEPARATOR = "\r\n";
-const std::string Utils::IP = "34.246.184.49";
+const std::string Utils::HOST = "34.246.184.49";
 const int Utils::PORT = 8080;
 
 int Utils::open_connection() {
@@ -15,7 +16,7 @@ int Utils::open_connection() {
 	struct sockaddr_in server_address{};
 	server_address.sin_family = AF_INET;
 	server_address.sin_port = htons(Utils::PORT);
-	inet_aton(Utils::IP.c_str(), &server_address.sin_addr);
+	inet_aton(Utils::HOST.c_str(), &server_address.sin_addr);
 
 	if (connect(socket_fd, (const sockaddr *) &server_address, sizeof(server_address)) < 0) {
 		std::cerr << "ERROR: Something went wrong connecting to the server!" << std::endl;
@@ -52,9 +53,9 @@ std::string Utils::receive_from_server() {
 	size_t body_length = 0;
 
 	while (true) {
-		char buffer[4096];
+		char buffer[Utils::BUFFER_SIZE];
 		memset(buffer, 0, sizeof(buffer));
-		ssize_t bytes_read = read(Client::socket_fd, buffer, 4096);
+		ssize_t bytes_read = read(Client::socket_fd, buffer, Utils::BUFFER_SIZE);
 
 		if (bytes_read < 0) {
 			std::cerr << "ERROR: Something went wrong reading from the socket!" << std::endl;
@@ -74,16 +75,16 @@ std::string Utils::receive_from_server() {
 			if (body_length_start_position == std::string::npos)
 				continue;
 
-			body_length_start_position = body_length_start_position + 16;
+			body_length_start_position = body_length_start_position + sizeof("Content-Length: ") - 1;
 			body_length = strtol(response.data() + body_length_start_position, nullptr, 10);
 			break;
 		}
 	}
 
 	while (response.size() < header_end_position + body_length) {
-		char buffer[4096];
+		char buffer[Utils::BUFFER_SIZE];
 		memset(buffer, 0, sizeof(buffer));
-		ssize_t bytes_read = read(Client::socket_fd, buffer, 4096);
+		ssize_t bytes_read = read(Client::socket_fd, buffer, Utils::BUFFER_SIZE);
 
 		if (bytes_read < 0) {
 			std::cerr << "ERROR: Something went wrong reading from the socket!" << std::endl;
@@ -115,7 +116,7 @@ void Utils::add_cookie(const std::string &response, const std::string &cookie_na
 }
 
 void Utils::get_token(const std::string &response) {
-	size_t token_start_position = response.find(R"({"token":")") + 10;
+	size_t token_start_position = response.find(R"({"token":")") + sizeof(R"({"token":")") - 1;
 	size_t token_end_position = response.find('\"', token_start_position);
 	std::string token = response.substr(token_start_position, token_end_position - token_start_position);
 	Client::token = token;

@@ -28,12 +28,6 @@ void DeleteBookCommand::execute() const {
 	Utils::send_to_server(request);
 	std::string response = Utils::receive_from_server();
 
-	if (response.empty()) {
-		Client::socket_fd = Utils::open_connection();
-		Utils::send_to_server(request);
-		response = Utils::receive_from_server();
-	}
-
 	int status_code = Utils::get_status_code(response);
 
 	if (status_code < 200 || status_code >= 300) {

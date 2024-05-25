@@ -9,7 +9,7 @@ std::string Request::compute() {
 	std::stringstream request;
 
 	request << Request::method << " " << Request::route << " " << protocol << Utils::LINE_SEPARATOR;
-	request << "Host: " << Utils::IP << Utils::LINE_SEPARATOR;
+	request << "Host: " << Utils::HOST << Utils::LINE_SEPARATOR;
 
 	if (!Client::token.empty())
 		request << "Authorization: Bearer " << Client::token << Utils::LINE_SEPARATOR;
