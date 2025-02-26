@@ -6,97 +6,80 @@ std::string Client::token;
 std::vector<std::string> Client::cookies;
 
 void Client::start() {
-	Client::initialize_commands();
+  initialize_commands();
 
-	while (true) {
-		Client::socket_fd = Utils::open_connection();
-		std::string command;
-		std::getline(std::cin, command);
+  while (true) {
+    std::string command_name;
+    std::getline(std::cin, command_name);
 
-		if (command == "exit") {
-			close(Client::socket_fd);
-			break;
-		}
+    if (command_name == "exit")
+      break;
 
-		switch (Client::commands[command]) {
-			case REGISTER: {
-				auto *register_command = new(std::nothrow) RegisterCommand();
-				register_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
+    auto it = commands.find(command_name);
+    if (it == commands.end()) {
+      std::cerr << "ERROR: The command is not valid!" << std::endl;
+      continue;
+    }
 
-			case LOGIN: {
-				auto *login_command = new(std::nothrow) LoginCommand();
-				login_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
+    try {
+      socket_fd = Utils::open_connection();
+      execute_command(it->second);
+      close(socket_fd);
+    } catch (const std::runtime_error &error) {
+      std::cerr << error.what() << std::endl;
+      close(socket_fd);
+    }
+  }
+}
 
-			case ENTER_LIBRARY: {
-				auto *enter_library_command = new(std::nothrow) EnterLibraryCommand();
-				enter_library_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
+void Client::execute_command(CommandName command_name) {
+  std::unique_ptr<Command> command;
 
-			case GET_BOOKS: {
-				auto *get_books_command = new(std::nothrow) GetBooksCommand();
-				get_books_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
+  switch (command_name) {
+  case REGISTER:
+    command = std::make_unique<RegisterCommand>();
+    break;
+  case LOGIN:
+    command = std::make_unique<LoginCommand>();
+    break;
+  case ENTER_LIBRARY:
+    command = std::make_unique<EnterLibraryCommand>();
+    break;
+  case GET_BOOKS:
+    command = std::make_unique<GetBooksCommand>();
+    break;
+  case GET_BOOK:
+    command = std::make_unique<GetBookCommand>();
+    break;
+  case ADD_BOOK:
+    command = std::make_unique<AddBookCommand>();
+    break;
+  case DELETE_BOOK:
+    command = std::make_unique<DeleteBookCommand>();
+    break;
+  case LOGOUT:
+    command = std::make_unique<LogoutCommand>();
+    break;
+  default:
+    break;
+  }
 
-			case GET_BOOK: {
-				auto *get_book_command = new(std::nothrow) GetBookCommand();
-				get_book_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
-
-			case ADD_BOOK: {
-				auto *add_book_command = new(std::nothrow) AddBookCommand();
-				add_book_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
-
-			case DELETE_BOOK: {
-				auto *delete_book_command = new(std::nothrow) DeleteBookCommand();
-				delete_book_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
-
-			case LOGOUT: {
-				auto *logout_command = new(std::nothrow) LogoutCommand();
-				logout_command->execute();
-				close(Client::socket_fd);
-				break;
-			}
-
-			default: {
-				close(Client::socket_fd);
-				std::cerr << "ERROR: The command is not valid!" << std::endl;
-				break;
-			}
-		}
-	}
+  command->execute();
 }
 
 void Client::initialize_commands() {
-	Client::commands["register"] = REGISTER;
-	Client::commands["login"] = LOGIN;
-	Client::commands["enter_library"] = ENTER_LIBRARY;
-	Client::commands["get_books"] = GET_BOOKS;
-	Client::commands["get_book"] = GET_BOOK;
-	Client::commands["add_book"] = ADD_BOOK;
-	Client::commands["delete_book"] = DELETE_BOOK;
-	Client::commands["logout"] = LOGOUT;
-	Client::commands["exit"] = EXIT;
+  commands = {{"register", REGISTER},
+              {"login", LOGIN},
+              {"enter_library", ENTER_LIBRARY},
+              {"get_books", GET_BOOKS},
+              {"get_book", GET_BOOK},
+              {"add_book", ADD_BOOK},
+              {"delete_book", DELETE_BOOK},
+              {"logout", LOGOUT},
+              {"exit", EXIT}};
 }
 
 int main() {
-	Client::start();
-	return 0;
+  Client::start();
+  return 0;
 }

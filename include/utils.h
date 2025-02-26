@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 #include "client.h"
 
@@ -12,24 +11,23 @@
 
 class Utils {
 public:
-	static const int BUFFER_SIZE;
-	static const std::string LINE_SEPARATOR;
-	static const std::string HOST;
-	static const int PORT;
+  static const int BUFFER_SIZE;
+  static const std::string LINE_SEPARATOR;
+  static const std::string HOST;
+  static const int PORT;
 
-	static int open_connection();
+  static int open_connection();
 
-	static void send_to_server(const std::string &request);
+  static void send_to_server(const std::string &request);
 
-	static std::string receive_from_server();
+  static std::string receive_from_server();
 
-	static int get_status_code(const std::string &response);
+  static int get_status_code(const std::string &response);
 
-	static void add_cookie(const std::string &response, const std::string &cookie_name);
+  static void add_cookie(const std::string &response,
+                         const std::string &cookie_name);
 
-	static void get_token(const std::string &response);
+  static void get_token(const std::string &response);
 
-	static void format_field(std::string &field);
+  static void format_field(std::string &field);
 };
-
-#endif

@@ -5,36 +5,37 @@ std::string Request::route;
 nlohmann::json Request::body;
 
 std::string Request::compute() {
-	std::string protocol = "HTTP/1.1";
-	std::stringstream request;
+  const std::string protocol = "HTTP/1.1";
+  std::ostringstream request;
 
-	request << Request::method << " " << Request::route << " " << protocol << Utils::LINE_SEPARATOR;
-	request << "Host: " << Utils::HOST << Utils::LINE_SEPARATOR;
+  request << method << " " << route << " " << protocol << Utils::LINE_SEPARATOR;
+  request << "Host: " << Utils::HOST << Utils::LINE_SEPARATOR;
 
-	if (!Client::token.empty())
-		request << "Authorization: Bearer " << Client::token << Utils::LINE_SEPARATOR;
+  if (!Client::token.empty())
+    request << "Authorization: Bearer " << Client::token
+            << Utils::LINE_SEPARATOR;
 
-	if (!Request::body.empty()) {
-		request << "Content-Type: application/json" << Utils::LINE_SEPARATOR;
-		request << "Content-Length: " << std::to_string(Request::body.dump().size()) << Utils::LINE_SEPARATOR;
-	}
+  std::string body_data = body.dump();
+  if (!body.empty())
+    request << "Content-Type: application/json" << Utils::LINE_SEPARATOR
+            << "Content-Length: " << body_data.size() << Utils::LINE_SEPARATOR;
 
-	if (!Client::cookies.empty()) {
-		request << "Cookie: ";
+  if (!Client::cookies.empty()) {
+    request << "Cookie: ";
 
-		for (size_t index = 0; index < Client::cookies.size(); ++index) {
-			request << Client::cookies[index];
-			if (index != Client::cookies.size() - 1)
-				request << "; ";
-		}
+    for (size_t index = 0; index < Client::cookies.size(); ++index) {
+      request << Client::cookies[index];
+      if (index != Client::cookies.size() - 1)
+        request << "; ";
+    }
 
-		request << Utils::LINE_SEPARATOR;
-	}
+    request << Utils::LINE_SEPARATOR;
+  }
 
-	request << Utils::LINE_SEPARATOR;
+  request << Utils::LINE_SEPARATOR;
 
-	if (!Request::body.empty())
-		request << Request::body.dump() << Utils::LINE_SEPARATOR;
+  if (!body.empty())
+    request << body_data << Utils::LINE_SEPARATOR;
 
-	return request.str();
+  return request.str();
 }

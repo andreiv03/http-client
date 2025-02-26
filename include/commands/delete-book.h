@@ -1,5 +1,4 @@
-#ifndef DELETE_BOOK_H
-#define DELETE_BOOK_H
+#pragma once
 
 #include "../client.h"
 #include "../command.h"
@@ -12,7 +11,5 @@
 
 class DeleteBookCommand : public Command {
 public:
-	void execute() const override;
+  void execute() const override;
 };
-
-#endif

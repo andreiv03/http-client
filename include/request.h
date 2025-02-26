@@ -1,5 +1,4 @@
-#ifndef REQUEST_H
-#define REQUEST_H
+#pragma once
 
 #include "client.h"
 #include "utils.h"
@@ -10,11 +9,9 @@
 
 class Request {
 public:
-	static std::string method;
-	static std::string route;
-	static nlohmann::json body;
+  static std::string method;
+  static std::string route;
+  static nlohmann::json body;
 
-	static std::string compute();
+  static std::string compute();
 };
-
-#endif

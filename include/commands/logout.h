@@ -1,5 +1,4 @@
-#ifndef LOGOUT_H
-#define LOGOUT_H
+#pragma once
 
 #include "../client.h"
 #include "../command.h"
@@ -11,7 +10,5 @@
 
 class LogoutCommand : public Command {
 public:
-	void execute() const override;
+  void execute() const override;
 };
-
-#endif

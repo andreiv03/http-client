@@ -1,5 +1,4 @@
-#ifndef LOGIN_H
-#define LOGIN_H
+#pragma once
 
 #include "../client.h"
 #include "../command.h"
@@ -12,7 +11,5 @@
 
 class LoginCommand : public Command {
 public:
-	void execute() const override;
+  void execute() const override;
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef ENTER_LIBRARY_H
-#define ENTER_LIBRARY_H
+#pragma once
 
 #include "../client.h"
 #include "../command.h"
@@ -11,7 +10,5 @@
 
 class EnterLibraryCommand : public Command {
 public:
-	void execute() const override;
+  void execute() const override;
 };
-
-#endif

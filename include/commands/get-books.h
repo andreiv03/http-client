@@ -1,5 +1,4 @@
-#ifndef GET_BOOKS_H
-#define GET_BOOKS_H
+#pragma once
 
 #include "../client.h"
 #include "../command.h"
@@ -12,7 +11,5 @@
 
 class GetBooksCommand : public Command {
 public:
-	void execute() const override;
+  void execute() const override;
 };
-
-#endif
