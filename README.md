@@ -6,17 +6,12 @@ Built with an **abstract command pattern**, it ensures **scalability**, **mainta
 
 ## ✨ Features
 
-✔ **Full HTTP Request Support** – Handles GET, POST, PUT, DELETE requests.
-
-✔ **Custom Headers & Authentication** – Allows adding headers (e.g., `Authorization`, `Cookie`).
-
-✔ **JSON Parsing** – Uses `nlohmann::json` for handling request/response payloads.
-
-✔ **TCP Socket Communication** – Implements low-level networking using POSIX sockets.
-
-✔ **Command-Based Architecture** – Uses an abstract command pattern for better organization.
-
-✔ **Efficient Error Handling** – Handles network failures and incorrect responses gracefully.
+- **Full HTTP Request Support** – Handles GET, POST, PUT, DELETE requests.
+- **Custom Headers & Authentication** – Allows adding headers (e.g., `Authorization`, `Cookie`).
+- **JSON Parsing** – Uses `nlohmann::json` for handling request/response payloads.
+- **TCP Socket Communication** – Implements low-level networking using POSIX sockets.
+- **Command-Based Architecture** – Uses an abstract command pattern for better organization.
+- **Efficient Error Handling** – Handles network failures and incorrect responses gracefully.
 
 ## ⚡ Technology Stack
 
@@ -27,7 +22,7 @@ Built with an **abstract command pattern**, it ensures **scalability**, **mainta
 
 ## ⚙️ Build & Installation
 
-### 🔹 Prerequisites
+### Prerequisites
 
 Before building the project, ensure you have the following installed:
 
@@ -36,7 +31,7 @@ Before building the project, ensure you have the following installed:
 - **POSIX-compliant system** (Linux/macOS; Windows users can use WSL or MinGW)
 - **nlohmann JSON library** (included automatically)
 
-### 🔹 Build Instructions
+### Build Instructions
 
 Follow these steps to clone, build, and run the HTTP client:
 
